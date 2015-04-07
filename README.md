@@ -11,5 +11,6 @@ Moreover, PIPFIT is completely open source.
 - Expand Readme
 
 ## License
-
 Distributed under GPL 2.
+
+This is my senior project for [CPSC 490](http://dus.cs.yale.edu/490.html)
