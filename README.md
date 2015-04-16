@@ -1,6 +1,6 @@
 # pipfit
 
-PIPFIT - **p**rivacy **i**gnorant **p**ersonal **fi**nance **t**racker - is a tool
+PIPFIT - **p**assword **i**gnorant **p**ersonal **fi**nance **t**racker - is a tool
 to track and manage bank accounts, credit cards, and more. Unlike existing platforms
 like [Mint](www.mint.com), PIPFIT does not rely on screen scraping and does not require
 you to enter your bank account login information!
