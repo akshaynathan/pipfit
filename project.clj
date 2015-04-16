@@ -3,4 +3,6 @@
   :url "http://akshaynathan.com/pipfit"
   :license {:name "GNU General Public License v2.0"
             :url "https://www.gnu.org/licenses/gpl-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.6.0"]])
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [clj-time "0.9.0"]
+                 ])

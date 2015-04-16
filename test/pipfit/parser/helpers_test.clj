@@ -1,6 +1,6 @@
-(ns pipfit.parser.helpers-test
+(ns pipfit.parser.helpers_test
   (:require [clojure.test :refer :all]
-            [parser.helpers :refer :all]))
+            [pipfit.parser.helpers :refer :all]))
 
 (deftest test_parse_money
   (is (= 1000 (parse_money "$ 1 0 . 0 0"))

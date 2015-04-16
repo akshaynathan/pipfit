@@ -1,6 +1,6 @@
-(ns pipfit.parser.transaction-test
+(ns pipfit.parser.transaction_test
   (:require [clojure.test :refer :all]
-            [parser.transaction :refer :all]))
+            [pipfit.parser.transaction :refer :all]))
 
 (deftest test_validate_transaction
   ; Invalid type
@@ -39,6 +39,7 @@
                     :ttype :WITHDRAW,
                     :notes "",
                     :amount 5,
+                    :time "",
                     )))
       "validate_transaction must return true on correct transaction."
       )

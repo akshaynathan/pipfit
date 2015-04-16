@@ -16,17 +16,19 @@
     :to string?,
     :amount #(and (integer? %) (pos? %)),
     :notes string?,
+    :time string?, ; Timestamps in format from RFC 3339
     ))
      
 ; Mapping between transaction type and fields
 (def tfieldmapping
   (hash-map
-    :WITHDRAW #{:amount :notes},
-    :DEPOSIT #{:from :amount :notes},
-    :TRANSFER #{:from :to :amount :notes},
-    :PAYMENT #{:to :amount :notes}
+    :WITHDRAW #{:amount :notes :time},
+    :DEPOSIT #{:from :amount :notes :time},
+    :TRANSFER #{:from :to :amount :notes :time},
+    :PAYMENT #{:to :amount :notes :time}
     ))
 
+; TODO: Add validation for time field.
 ; Validate a map t as a transaction.
 ; Returns a list of just true if the transaction is valid or
 ; false and an error message.

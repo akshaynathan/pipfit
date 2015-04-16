@@ -1,4 +1,4 @@
-(ns pipfit.parser.parser)
+(ns pipfit.parser.mailparser)
 
 ; A parser is responsible for parsing transactions
 ; for a specific bank or credit card type.
@@ -8,11 +8,9 @@
   ^String bank          ; The bank or institution.
   ^String account_type  ; Type of account at bank (checking / saving etc)
 
-                        ; The following two fields are changed whenever
-                        ; the parser source is changed.
+                        ; The following field changed whenever the
+                        ; parser source is changed.
   ^Integer version      ; The version of the parser, starts at 1.
-  ^String last_updated  ; The last time the parser file was updated. Time
-                        ; format from RFC 3339. 
 
   supported_ttypes      ; Set of keywords from parser.transaction/ttypes
                         ; which this parser can export.
@@ -28,10 +26,7 @@
 ; Parsers can parse messages (plain text, xml, etc).
 (defprotocol Parser
   "A parser which generates ParsedMessage from a message."
-  (get_info [this message] "Get info for the parser. If the message is not
-                           yet available, m can be the empty string. Note
-                           that without the message, ParserInfo may be
-                           incomplete.")
+  (get_info [this] "Get info for the parser.")
   (parse_message [this message] "Parse the message m and returns a
                                 ParsedMessage.")
   )
