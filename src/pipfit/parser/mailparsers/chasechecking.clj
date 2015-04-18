@@ -42,7 +42,7 @@
         ; Read amount in
         amount (parse_money (second (string/split content #" ")))
         ; Get recipient (between lowercase "to" and "on")
-        recipient (string/trim (text_before (text_after content #" to ") #" on "))
+        recipient (string/trim (text_before (text_after content #" to ") #" on ")) 
         ; Get and parse time
         parsed_time (parse_time
                      (text_before (text_after content #" on ") #" exceeded "))
@@ -56,6 +56,7 @@
                                  )))))
 
 ; TODO: Add more example messages.
+; TODO: Move all example messages to the test cases.
 
 ; EXAMPLE MESSAGES
 ;
