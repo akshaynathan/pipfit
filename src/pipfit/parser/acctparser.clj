@@ -1,10 +1,10 @@
-(ns pipfit.parser.mailparser)
+(ns pipfit.parser.acctparser)
 
 ; A parser is responsible for parsing transactions
 ; for a specific bank or credit card type.
 
 ; Struct to hold parser specific information.
-(defrecord ParserInfo [
+(defrecord AcctParserInfo [
   ^String bank          ; The bank or institution.
   ^String account_type  ; Type of account at bank (checking / saving etc)
 
@@ -24,9 +24,11 @@
   ])
 
 ; Parsers can parse messages (plain text, xml, etc).
-(defprotocol Parser
-  "A parser which generates ParsedMessage from a message."
+(defprotocol AcctParser
+  "A parser which generates ParsedMessage from an email."
   (get_info [this] "Get info for the parser.")
+  (is_valid? [this sender subject body]
+             "Checks if the parser is valid for an email.")
   (parse_message [this message] "Parse the message m and returns a
                                 ParsedMessage.")
   )

@@ -1,5 +1,5 @@
-(ns pipfit.parser.mailparsers.parserslist
-  (:require [pipfit.parser.mailparsers.chasechecking
+(ns pipfit.parser.acctparsers.parserslist
+  (:require [pipfit.parser.acctparsers.chasechecking
              :refer [->ChaseCheckingParser]]
     )
   )

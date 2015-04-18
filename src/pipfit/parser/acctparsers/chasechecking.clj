@@ -1,7 +1,7 @@
-(ns pipfit.parser.mailparsers.chasechecking
+(ns pipfit.parser.acctparsers.chasechecking
   (:require [pipfit.parser.helpers :refer :all]
             [pipfit.parser.transaction :refer :all]
-            [pipfit.parser.mailparser :refer :all]
+            [pipfit.parser.acctparser :refer :all]
             [clojure.string :as string]
             [clj-time.format :as f]
             )
