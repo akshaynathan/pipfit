@@ -5,4 +5,6 @@
             :url "https://www.gnu.org/licenses/gpl-2.0.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [clj-time "0.9.0"]
+                 [javax.mail/mail "1.4.4"]
+                 [org.clojure/tools.logging "0.3.1"]
                  ])
