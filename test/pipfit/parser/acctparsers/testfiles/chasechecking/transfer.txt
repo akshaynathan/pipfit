@@ -1,0 +1,3 @@
+This is an Alert to help manage your account ending in 1234.
+
+A $336.96 external transfer to DISCOVER on 02/21/2015 2:20:13 AM EST exceeded your Alert setting.

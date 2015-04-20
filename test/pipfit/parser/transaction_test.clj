@@ -2,46 +2,31 @@
   (:require [clojure.test :refer :all]
             [pipfit.parser.transaction :refer :all]))
 
-(deftest test_validate_transaction
-  ; Invalid type
-  (is (false? (first 
-                (validate_transaction
-                  (hash-map
-                    :ttype :INVALID,
-                    :from "",
-                    :to "",
-                    :amount 10,
-                    ))))
-      "Transactions must have valid type."
-      )
-  ; Missing field
-  (is (false? (first 
-                (validate_transaction
-                  (hash-map
-                    :ttype :WITHDRAW,
-                    :amount 10,
-                    ))))
-      "Transaction must have all required fields for type."
-      )
-  ; Incorrect field type
-  (is (false? (first 
-                (validate_transaction
-                  (hash-map
-                    :ttype :WITHDRAW,
-                    :notes "",
-                    :amount "",
-                    ))))
-      "Transaction fields must be of correct type."
-      )
-  (is (first 
-                (validate_transaction
-                  (hash-map
-                    :ttype :WITHDRAW,
-                    :notes "",
-                    :amount 5,
-                    :time "",
-                    )))
-      "validate_transaction must return true on correct transaction."
-      )
-  )
-
+(deftest test-validate-transaction
+  (is (false? (validate-transaction {:ttype :INVALID
+                                     :from ""
+                                     :to ""
+                                     :amount 10
+                                     }))
+      "Transaction must have valid type.")
+  (is (false? (validate-transaction {:ttype :WITHDRAW
+                                     :amount 10
+                                     }))
+      "Transaction must have all required fields.")
+  (is (false? (validate-transaction {:ttype :WITHDRAW
+                                     :amount ""
+                                     :notes ""
+                                     :time ""
+                                     }))
+      "Fields must be of correct type.")
+  (is (false? (validate-transaction {:ttype :WITHDRAW
+                                     :amount 10
+                                     :notes ""
+                                     :time "notatimestamp"
+                                     }))
+      "Time field must be correct format.")
+  (is (validate-transaction {:ttype :WITHDRAW
+                             :amount 10
+                             :notes ""
+                             :time "2015-04-20T05:11:03Z"
+                             })))

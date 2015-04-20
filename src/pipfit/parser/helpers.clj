@@ -1,22 +1,40 @@
-(ns pipfit.parser.helpers)
+(ns pipfit.parser.helpers
+  (:require [clj-time.format :as f]
+            [clj-time.coerce :as c]
+            [clojure.string :as s]
+            [clojure.tools.logging :as log]
+            ))
 
-(defn parse_money [mstr]
+(defn date->timestamp
+  "Parses a java.util.Date into the standard rfc3339 timestamp."
+  [date]
+  (f/unparse (f/formatters :date-time-no-ms)
+             (c/from-date date)))
+
+(defn parse-money
   "Parses string representing currency to long. Assumes value is in dollars."
+  [mstr]
   (.longValue (* 100 (BigDecimal. 
-                        (clojure.string/trim 
-                          (clojure.string/replace mstr #"[^0-9^\.]" ""))))))
+                        (s/trim 
+                          (s/replace mstr #"[^0-9^\.]" ""))))))
 
-(defn text_after [text re]
+(defn validate-timestamp
+  "Validates a timestamp."
+  [ts]
+  (try (do (f/parse (f/formatters :date-time-no-ms) ts) true)
+       (catch Exception e (do (log/error e) false))))
+
+(defn text-after [text re]
   "Returns text after the first instance of a regular expression re."
-  (last (clojure.string/split text re 2))
+  (last (s/split text re 2))
   )
 
-(defn text_before [text re]
+(defn text-before [text re]
   "Returns text after the first instance of a regular expression re."
-  (first (clojure.string/split text re 2))
+  (first (s/split text re 2))
   )
 
-(defn next_word [text]
+(defn next-word [text]
   "Returns next word with whitespace removed."
-  (first (clojure.string/split text #"\s" 2))
+  (first (s/split (s/trim text) #"\s" 2))
   )

@@ -1,5 +1,7 @@
 (ns pipfit.parser.emailparser
-  (:require [clojure.tools.logging :as log])
+  (:require [clojure.tools.logging :as log]
+            [clojure.string :as s]
+            )
   (:import (javax.mail Message Session)
            (javax.mail.internet MimeMessage
                                 MimeMultipart
@@ -26,6 +28,12 @@
     (let [[_ m] (re-find #"(?i)(?:From:\s*)(.*>)(?:\n)" content)]
       m)
     nil))
+
+(defn- remove_forward_meta [content]
+  (let [meta_re #"(?i)forwarded|from\s*:|to\s*:|subject\s*:|date\s*:"]
+    (s/trim (s/join "\n" (remove #(re-find meta_re %) (s/split-lines content))))
+    )
+  )
 
 (defn- find_text_part [content]
   "Recursively searches message body for text/plain
@@ -69,7 +77,7 @@
        :from from
        :subject subject
        :date date
-       :body body
+       :body  (remove_forward_meta body)
        :osender osender
        }
       )

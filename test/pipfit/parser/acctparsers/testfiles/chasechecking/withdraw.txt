@@ -1,0 +1,5 @@
+This is an Alert to help manage your account ending in 1234.
+
+A $300.00 ATM withdrawal on 03/16/2015 11:34:44 PM EDT exceeded your $125.00 Alert limit.
+
+If you have any questions about this transaction, please call 1-877-CHASEPC.

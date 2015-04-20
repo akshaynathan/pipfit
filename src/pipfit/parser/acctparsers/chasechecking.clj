@@ -1,7 +1,7 @@
 (ns pipfit.parser.acctparsers.chasechecking
   (:require [pipfit.parser.helpers :refer :all]
             [pipfit.parser.transaction :refer :all]
-            [pipfit.parser.acctparser :refer :all]
+            [pipfit.parser.accountparser :refer :all]
             [clojure.string :as string]
             [clj-time.format :as f]
             )
@@ -9,67 +9,53 @@
 
 ; Bank - Chase
 ; Account Type - Checking / Debit
+; Example messages - acctparsers/testfiles/chasechecking
 
 ; Current parser version, change on each revision.
 (def version 1)
 
-(def supported_transactions
-  #{:PAYMENT}
+(def supported-transactions
+  #{:DEBIT :BALANCE :WITHDRAW :TRANSFER}
   )
 
 ; Helper method to parse time from emails.
 ; Chase times in format MM/DD/YYYY H:MM:SS PM/AM TIMEZONE
-(defn- parse_time [str_time]
+(defn- parse-time [str-time]
   (let [formatter (f/formatter "MM/dd/yyyy h:mm:ss aa zzz")
-        parsed_time (f/parse formatter str_time)]
-    (f/unparse (f/formatters :date-time-no-ms) parsed_time)))
+        parsed-time (f/parse formatter (string/trim str-time))]
+    (f/unparse (f/formatters :date-time-no-ms) parsed-time)))
 
+; Helper method to parse out the actual transaction.
+(defn- parse-transaction [text]
+  (if (= (next-word text) "As")
+    ; BALANCE
+    (let [t (parse-time (text-before (text-after text #"of") #","))
+          b (parse-money (re-find #"\$\d*\.\d*" text))]
+      {:ttype :BALANCE, :amount b, :time t, :notes ""})
+    (let [b (parse-money (second (string/split text #" ")))
+          t (parse-time
+              (text-before (text-after text #" on ") #" exceeded "))]
+      (if (re-find #"(?i)withdraw" text)
+        ; WITHDRAW
+        {:ttype :WITHDRAW, :amount b, :time t, :notes ""}
+        (let [r (string/trim (text-before (text-after text #" to ") #" on "))]
+          (if (re-find #"(?i)transfer" text)
+            ; TRANSFER
+            {:ttype :TRANSFER, :amount b, :time t, :to r, :notes ""}
+            ; DEBIT
+            {:ttype :DEBIT, :amount b, :time t, :to r, :notes ""}))))))
 
 (defrecord ChaseCheckingParser []
-  Parser
-  (get_info [this]
-    (->ParserInfo "Chase" "Checking" version supported_transactions)
-    )
-  ; Example messages are below
+  AccountParser
+  (get-info [this]
+    (->AccountParserInfo "CHASE" :CHECKING version supported-transactions))
+  ; Example messages are bel
   ; TODO: Handle other types of transactions.
-  (parse_message [this message]
+  (parse-message [this message]
     (let 
-      [
-        lines (string/split message #"[\r\n]+")
-        ; Get integer account number from first line.
-        acct_id (re-find #"\d+" (first lines))
-        content (second lines)
-        ; Read amount in
-        amount (parse_money (second (string/split content #" ")))
-        ; Get recipient (between lowercase "to" and "on")
-        recipient (string/trim (text_before (text_after content #" to ") #" on ")) 
-        ; Get and parse time
-        parsed_time (parse_time
-                     (text_before (text_after content #" on ") #" exceeded "))
-       ]
-      (->ParsedMessage acct_id (hash-map
-                                 :ttype :PAYMENT
-                                 :to recipient
-                                 :amount amount
-                                 :notes ""
-                                 :time parsed_time
-                                 )))))
-
-; TODO: Add more example messages.
-; TODO: Move all example messages to the test cases.
-
-; EXAMPLE MESSAGES
-;
-; :PAYMENT
-; 
-; This is an Alert to help manage your account ending in 8307. \n
-; A $5.00 debit card transaction to VENMO on 03/30/2015 9:21:07 PM EDT exceeded
-; your $1.00 set Alert limit. \n
-; If you have any questions about this transaction, please call 1-877-CHASEPC. \n
-;
-; :WITHDRAWAL
-;
-; :TRANSFER
-;
-; :DEPOSIT
-;
+      [lines (string/split message #"[\r\n]+")
+       ; Get integer account number from first line.
+       acct-id (re-find #"\d+" (first lines))
+       content (second lines)
+       transaction (parse-transaction content)]
+      (->ParsedMessage acct-id transaction))))

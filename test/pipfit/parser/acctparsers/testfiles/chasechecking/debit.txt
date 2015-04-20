@@ -1,0 +1,5 @@
+This is an Alert to help manage your account ending in 1234.
+
+A $7.29 debit card transaction to McDonalds on 04/14/2015 6:33:14 PM EDT exceeded your $1.00 set Alert limit.
+
+If you have any questions about this transaction, please call 1-877-CHASEPC.

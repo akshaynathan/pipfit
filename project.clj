@@ -7,4 +7,5 @@
                  [clj-time "0.9.0"]
                  [javax.mail/mail "1.4.4"]
                  [org.clojure/tools.logging "0.3.1"]
+                 [net.sf.ofx4j/ofx4j "1.6"]
                  ])
