@@ -49,6 +49,13 @@
   AccountParser
   (get-info [this]
     (->AccountParserInfo "CHASE" :CHECKING version supported-transactions))
+  ; TODO: Write tests for is-valid-for-email?
+  (is-valid-for-email? [this email]
+    (not (nil? (and (re-find #"alertsp\.chase\.com" (:sender email))
+                 (or (re-find #"minimum balance" (:body email))
+                   (re-find #"Debit" (:subject email))
+                   (re-find #"external transfer" (:body email))
+                   (re-find #"ATM" (:body email)))))))
   (parse-message [this message]
     (let 
       [lines (string/split message #"[\r\n]+")
