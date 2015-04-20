@@ -8,7 +8,7 @@
            [java.util Date]
            [net.sf.ofx4j.io AggregateUnmarshaller]
            [net.sf.ofx4j.domain.data ResponseEnvelope]
-           ; Supported types
+           ; Basic
            [net.sf.ofx4j.domain.data.common TransactionList
                                             Transaction
                                             BalanceInfo]
@@ -23,89 +23,69 @@
             CreditCardAccountDetails
             CreditCardStatementResponse
             CreditCardStatementResponseTransaction
-            CreditCardResponseMessageSet]
-           )
-  )
+            CreditCardResponseMessageSet]))
 
 ; Provides a parser for a subset of the OFX format by wrapping
 ; OFX4J. Functionality will be added as necessary.
 
-(defrecord AccountUpdate [])
-
-(defmulti parse-ofx
-  "Parse OFX into map."
+(defmulti ofx->map
+  "Parses OFX file into map. Unsupported tags are ignored."
   class)
 
-(defmethod parse-ofx ResponseEnvelope [e]
-  (remove nil? (map parse-ofx (.getMessageSets e))))
+(defmethod ofx->map ResponseEnvelope [e]
+  (remove nil? (map ofx->map (.getMessageSets e))))
 
-(defmethod parse-ofx CreditCardResponseMessageSet [m]
-  (map parse-ofx (.getResponseMessages m)))
+(defmethod ofx->map CreditCardResponseMessageSet [m]
+  (map ofx->map (.getResponseMessages m)))
 
-(defmethod parse-ofx BankingResponseMessageSet [m]
-  (map parse-ofx (.getResponseMessages m)))
+(defmethod ofx->map BankingResponseMessageSet [m]
+  (map ofx->map (.getResponseMessages m)))
 
-(defmethod parse-ofx CreditCardStatementResponseTransaction [t]
-  (parse-ofx (.getMessage t)))
+(defmethod ofx->map CreditCardStatementResponseTransaction [t]
+  (ofx->map (.getMessage t)))
 
-(defmethod parse-ofx BankStatementResponseTransaction [t]
-  (parse-ofx (.getMessage t)))
+(defmethod ofx->map BankStatementResponseTransaction [t]
+  (ofx->map (.getMessage t)))
 
-(defmethod parse-ofx CreditCardStatementResponse [r]
-  {:account (parse-ofx (.getAccount r))
-   :available-balance (parse-ofx (.getAvailableBalance r))
-   :ledger-balance (parse-ofx (.getLedgerBalance r))
+(defmethod ofx->map CreditCardStatementResponse [r]
+  {:account (ofx->map (.getAccount r))
+   :available-balance (ofx->map (.getAvailableBalance r))
+   :ledger-balance (ofx->map (.getLedgerBalance r))
    :currency (.getCurrencyCode r)
-   :transactions (map parse-ofx (.getTransactions
-                                  (.getTransactionList r)))
-   })
+   :transactions (map ofx->map (.getTransactions
+                                  (.getTransactionList r)))})
 
-(defmethod parse-ofx BankStatementResponse [r]
-  {:account (parse-ofx (.getAccount r))
-   :available-balance (parse-ofx (.getAvailableBalance r))
-   :ledger-balance (parse-ofx (.getLedgerBalance r))
+(defmethod ofx->map BankStatementResponse [r]
+  {:account (ofx->map (.getAccount r))
+   :available-balance (ofx->map (.getAvailableBalance r))
+   :ledger-balance (ofx->map (.getLedgerBalance r))
    :currency (.getCurrencyCode r)
-   :transactions (map parse-ofx (.getTransactions
-                                  (.getTransactionList r)))
-   })
+   :transactions (map ofx->map (.getTransactions
+                                  (.getTransactionList r)))})
 
-(defmethod parse-ofx Transaction [t]
+(defmethod ofx->map Transaction [t]
   {:amount (parse-money (.getAmount t))
    :date (date->timestamp (.getDatePosted t))
    :id (.getId t)
    :notes (.getMemo t)
    :name (.getName t)
-   :type (str (.getTransactionType t))
-   }
-  )
+   :type (str (.getTransactionType t))})
 
-(defmethod parse-ofx BankAccountDetails [acctdetails]
-  {:account-key (.getAccountKey acctdetails)
-   :account-number (.getAccountNumber acctdetails)
+(defmethod ofx->map BankAccountDetails [acctdetails]
+  {:account-number (.getAccountNumber acctdetails)
    :account-type (str (.getAccountType acctdetails))
-   :routing-number (.getBankId acctdetails)
-   })
+   :routing-number (.getBankId acctdetails)})
 
-(defmethod parse-ofx CreditCardAccountDetails [acctdetails]
-  {:account-key (.getAccountKey acctdetails)
-   :account-number (.getAccountNumber acctdetails)
-   })
+(defmethod ofx->map CreditCardAccountDetails [acctdetails]
+  {:account-number (.getAccountNumber acctdetails)})
 
-(defmethod parse-ofx BalanceInfo [balanceinfo]
+(defmethod ofx->map BalanceInfo [balanceinfo]
   {:amount (parse-money (.getAmount balanceinfo))
-   :as-of-date (date->timestamp (.getAsOfDate balanceinfo))
-   })
-
+   :as-of-date (date->timestamp (.getAsOfDate balanceinfo))})
 
 ; Ignore all unsupported classes.
-(defmethod parse-ofx :default [data]
+(defmethod ofx->map :default [data]
   nil)
-
-; Retrieves the transaction type by parsing
-; transaction information.
-(defn- get-transaction-type [transaction]
-  
-  )
 
 ; Makes parsed ofx map into sequence of 
 ; acctparser.ParsedMessage's.
@@ -113,10 +93,11 @@
   ofx-map
   )
 
+
 (defn parse-file [path]
   (try 
     (ofx->ParsedMessages
-      (parse-ofx (.unmarshal (AggregateUnmarshaller. ResponseEnvelope)
-                              (FileInputStream. (File. path)))))
+      (ofx->map (.unmarshal (AggregateUnmarshaller. ResponseEnvelope)
+                            (FileInputStream. (File. path)))))
     (catch Exception e
       (log/error (str "Unable to parse ofx file.\n" e)))))
