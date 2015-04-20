@@ -32,7 +32,7 @@
   (parse-message
     [this message] "Parse email message and return ParsedMessage.")
   (parse-ofx-transaction 
-    [this tmap]
+    [this acctid tmap]
     "Parse ofx transaction map (see parser.ofxparser) and return
     ParsedMessage")) 
 

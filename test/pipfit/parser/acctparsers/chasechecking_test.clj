@@ -6,10 +6,34 @@
 
 (def tfpath "test/pipfit/parser/acctparsers/testfiles/chasechecking/")
 
-; Expected output for the test messages.
+; Input OFX maps from ofxparser.
+(def input-ofx
+  {"debit" {:amount 729
+            :date "2015-04-14T22:33:14Z"
+            :id "201303041" 
+            :notes ""
+            :name "MCDONALDS"
+            :type "DEBIT"
+            }
+   "withdraw" {:amount 30000
+               :date "2015-03-17T03:34:44Z"
+               :id "201303041" 
+               :notes ""
+               :name "NON-CHASE ATM WITHDRAW"
+               :type "DEBIT"
+               }
+   "transfer" {:amount 33696
+               :date "2015-02-21T07:20:13Z"
+               :id "201303041" 
+               :notes "WEB ID: 123455677"
+               :name "DISCOVER"
+               :type "DEBIT"
+               }})
+
+; Expected output for the test messages and OFX maps.
 (def expected-parsed-messages
   {"debit" (->ParsedMessage "1234" {:ttype :DEBIT
-                                    :to "McDonalds"
+                                    :to "MCDONALDS"
                                     :amount 729
                                     :notes ""
                                     :time "2015-04-14T22:33:14Z"
@@ -58,3 +82,11 @@
                 parsed)
         (str "Expected:\n" expected-parsed-messages "\nReceived:\n" parsed)
         )))
+
+(deftest test-parse-ofx
+  (let [tp (->ChaseCheckingParser)]
+    (doseq [[k v] input-ofx]
+      (is (=
+           (assoc (:transaction (parse-ofx-transaction tp "1234" v))
+                  :notes "")
+           (:transaction (get expected-parsed-messages k)))))))

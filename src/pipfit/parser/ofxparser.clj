@@ -70,9 +70,9 @@
    })
 
 (defmethod parse-ofx Transaction [t]
-  {:amount (parse_money (.getAmount t))
+  {:amount (parse-money (.getAmount t))
    :date (date->timestamp (.getDatePosted t))
-   :refnum (.getReferenceNumber t)
+   :id (.getId t)
    :notes (.getMemo t)
    :name (.getName t)
    :type (str (.getTransactionType t))
@@ -92,7 +92,7 @@
    })
 
 (defmethod parse-ofx BalanceInfo [balanceinfo]
-  {:amount (parse_money (.getAmount balanceinfo))
+  {:amount (parse-money (.getAmount balanceinfo))
    :as-of-date (date->timestamp (.getAsOfDate balanceinfo))
    })
 

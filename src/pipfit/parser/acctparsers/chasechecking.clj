@@ -49,8 +49,6 @@
   AccountParser
   (get-info [this]
     (->AccountParserInfo "CHASE" :CHECKING version supported-transactions))
-  ; Example messages are bel
-  ; TODO: Handle other types of transactions.
   (parse-message [this message]
     (let 
       [lines (string/split message #"[\r\n]+")
@@ -58,4 +56,19 @@
        acct-id (re-find #"\d+" (first lines))
        content (second lines)
        transaction (parse-transaction content)]
-      (->ParsedMessage acct-id transaction))))
+      (->ParsedMessage acct-id transaction)))
+  (parse-ofx-transaction [this acctid transaction]
+    (let
+      [notes (if (nil? (:notes transaction))
+               ""
+               (:notes transaction)
+               )
+       amount (:amount transaction)
+       date (:date transaction)
+       to (:name transaction)
+       t (if (re-find #"(?i)withdraw" to)
+           {:ttype :WITHDRAW :amount amount :notes notes :time date}
+           (if (re-find #"(?i)web id" notes)
+             {:ttype :TRANSFER :amount amount :notes notes :time date :to to}
+             {:ttype :DEBIT :amount amount :notes notes :time date :to to}))]
+      (->ParsedMessage acctid t))))
