@@ -1,0 +1,113 @@
+                                                                                                                                                                                                                                                               
+Delivered-To: akshay.nathan@bulldogs.yale.edu
+Received: by 10.180.184.199 with SMTP id ew7csp1303926wic;
+        Mon, 20 Apr 2015 04:03:42 -0700 (PDT)
+X-Received: by 10.140.89.200 with SMTP id v66mr16213227qgd.50.1429527821640;
+        Mon, 20 Apr 2015 04:03:41 -0700 (PDT)
+Return-Path: <akshay.nathan08@gmail.com>
+Received: from mr1.its.yale.edu (mr1.its.yale.edu. [130.132.50.7])
+        by mx.google.com with ESMTPS id k81si19209635qkh.32.2015.04.20.04.03.41
+        for <akshay.nathan@bulldogs.yale.edu>
+        (version=TLSv1 cipher=RC4-SHA bits=128/128);
+        Mon, 20 Apr 2015 04:03:41 -0700 (PDT)
+Received-SPF: softfail (google.com: domain of transitioning akshay.nathan08@gmail.com does not designate 130.132.50.167 as permitted sender) client-ip=130.132.50.167;
+Authentication-Results: mx.google.com;
+       spf=softfail (google.com: domain of transitioning akshay.nathan08@gmail.com does not designate 130.132.50.167 as permitted sender) smtp.mail=akshay.nathan08@gmail.com;
+       dkim=pass header.i=@gmail.com
+Received: from vm-emlprdimg-07.its.yale.edu (vm-emlprdimg-07.its.yale.edu [130.132.50.167])
+	by mr1.its.yale.edu (8.12.11.20060308/8.12.11) with ESMTP id t3KB3eiQ020684
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT)
+	for <akshay.nathan@yale.edu>; Mon, 20 Apr 2015 07:03:40 -0400
+Received: from pps.filterd (vm-emlprdimg-07.its.yale.edu [127.0.0.1])
+	by vm-emlprdimg-07.its.yale.edu (8.14.7/8.14.7) with SMTP id t3KB0WII004334
+	for <akshay.nathan@yale.edu>; Mon, 20 Apr 2015 07:03:40 -0400
+Received: from mail-oi0-f53.google.com (mail-oi0-f53.google.com [209.85.218.53])
+	by vm-emlprdimg-07.its.yale.edu with ESMTP id 1tu35yefx7-1
+	(version=TLSv1/SSLv3 cipher=AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <akshay.nathan@yale.edu>; Mon, 20 Apr 2015 07:03:38 -0400
+Received: by oica37 with SMTP id a37so118958038oic.0
+        for <akshay.nathan@yale.edu>; Mon, 20 Apr 2015 04:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:in-reply-to:references:date:message-id:subject:from:to
+         :content-type;
+        bh=A74x/xfOTr8O56CRRFwsAAKjvhMT5Yp/TgGyLqUhDpo=;
+        b=W72Xe14XtpnIizhSXCpTjOwnqA7Ov9SZQYfAISLVl1nZSNiW9s85fxHYBBB9aaegOn
+         wEhc3gtIfKiY+YYRIiTy9lJTOIvl07hZFiFV/BkatIUjrWXzR3t4x/9Q4jwp2XlYGryJ
+         CkyOWUC9gD49kTA6aGfiof9g9M0Xd94dtcmxWRcm6ukzg3NO9dlCCcllFoS8ILY/Md0O
+         9MJB15fTtV6Jzdrg3Sgl2hlekAAUqB5KR7GfGgNUZYWYcGsfuibEcRn1AR1x7mecNKYk
+         aQcvVmVvqhPzX/RUzTMEILsn4pRWtnwRsq58yd372O5i4pSNyyehHtWA9KYODTWgQPFy
+         lrNg==
+MIME-Version: 1.0
+X-Received: by 10.60.223.228 with SMTP id qx4mr13897408oec.24.1429527814274;
+ Mon, 20 Apr 2015 04:03:34 -0700 (PDT)
+Received: by 10.76.171.5 with HTTP; Mon, 20 Apr 2015 04:03:34 -0700 (PDT)
+In-Reply-To: <CALVkzo4bn9sPAHWkt_t25vGsqG0qSRv8ZiJuwApOW+3eVbYsUg@mail.gmail.com>
+References: <CALVkzo6_cvffTG6VghLod8P2vvdfX_QQUn=X21yKaY1OJYnR-A@mail.gmail.com>
+	<CALVkzo4bn9sPAHWkt_t25vGsqG0qSRv8ZiJuwApOW+3eVbYsUg@mail.gmail.com>
+Date: Mon, 20 Apr 2015 07:03:34 -0400
+Message-ID: <CAMNK--UaUMsdN-6m=e-pRsutoXc2EgUJ0HzjGO0HJem8UWYsEQ@mail.gmail.com>
+Subject: Fwd: TEST
+From: Akshay Nathan <akshay.nathan08@gmail.com>
+To: akshay.nathan@yale.edu
+Content-Type: multipart/alternative; boundary=001a1130d02a9104dd051425e160
+X-Proofpoint-SPF-Result: pass
+X-Proofpoint-SPF-Record: v=spf1 redirect=_spf.google.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10432:5.13.68,1.0.33,0.0.0000
+ definitions=2015-04-20_01:2015-04-20,2015-04-19,1970-01-01 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 kscore.is_bulkscore=0
+ kscore.compositescore=0 circleOfTrustscore=0
+ compositescore=0.971115655221229 suspectscore=3
+ recipient_domain_to_sender_totalscore=0 phishscore=0 bulkscore=0
+ kscore.is_spamscore=0 rbsscore=0.971115655221229
+ recipient_to_sender_totalscore=0
+ recipient_domain_to_sender_domain_totalscore=0 spamscore=0
+ recipient_to_sender_domain_totalscore=0 urlsuspectscore=0.971115655221229
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=7.0.1-1402240000 definitions=main-1504200088
+X-Yale-Not-Spam: For more info see: http://www.yale.edu/email/spam/content.html
+X-YaleITSMailFilter: Version 1.2c (attachment(s) not renamed)
+X-Scanned-By: MIMEDefang 2.52 on 130.132.50.7
+
+--001a1130d02a9104dd051425e160
+Content-Type: text/plain; charset=UTF-8
+
+---------- Forwarded message ----------
+From: Akshay Nathan <akshay.nathan@yale.edu>
+Date: Mon, Apr 20, 2015 at 7:03 AM
+Subject: Fwd: TEST
+To: Akshay Nathan <akshay.nathan08@gmail.com>
+
+
+---------- Forwarded message ----------
+From: Akshay Nathan <akshay.nathan@yale.edu>
+Date: Mon, Apr 20, 2015 at 7:02 AM
+Subject: TEST
+To: Akshay Nathan <akshay.nathan@yale.edu>
+
+
+THIS IS A TEST MESSAGE
+
+--001a1130d02a9104dd051425e160
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><div class=3D"gmail_quote">---------- Forwarded messag=
+e ----------<br>From: <b class=3D"gmail_sendername">Akshay Nathan</b> <span=
+ dir=3D"ltr">&lt;<a href=3D"mailto:akshay.nathan@yale.edu">akshay.nathan@ya=
+le.edu</a>&gt;</span><br>Date: Mon, Apr 20, 2015 at 7:03 AM<br>Subject: Fwd=
+: TEST<br>To: Akshay Nathan &lt;<a href=3D"mailto:akshay.nathan08@gmail.com=
+">akshay.nathan08@gmail.com</a>&gt;<br><br><br>---------- Forwarded message=
+ ----------<br>
+From: Akshay Nathan &lt;<a href=3D"mailto:akshay.nathan@yale.edu">akshay.na=
+than@yale.edu</a>&gt;<br>
+Date: Mon, Apr 20, 2015 at 7:02 AM<br>
+Subject: TEST<br>
+To: Akshay Nathan &lt;<a href=3D"mailto:akshay.nathan@yale.edu">akshay.nath=
+an@yale.edu</a>&gt;<br>
+<br>
+<br>
+THIS IS A TEST MESSAGE<br>
+</div><br></div>
+
+--001a1130d02a9104dd051425e160--

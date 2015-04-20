@@ -28,7 +28,7 @@
   (get-info 
     [this] "Get AccountParserInfo for this parser.")
   (is-valid-for-email?
-    [this message] "Checks if the parser is valid for an email message.")
+    [this email] "Checks if the parser is valid for an email message.")
   (parse-message
     [this message] "Parse email message and return ParsedMessage.")
   (parse-ofx-transaction 
