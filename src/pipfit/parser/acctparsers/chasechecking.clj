@@ -61,8 +61,7 @@
     (let
       [notes (if (nil? (:notes transaction))
                ""
-               (:notes transaction)
-               )
+               (:notes transaction))
        amount (:amount transaction)
        date (:date transaction)
        to (:name transaction)
