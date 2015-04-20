@@ -1,6 +1,8 @@
 (ns pipfit.parser.ofxparser
   (:require [pipfit.parser.transaction :refer :all]
             [pipfit.parser.helpers :refer :all]
+            [pipfit.parser.acctparsers.parserslist :refer :all]
+            [pipfit.parser.accountparser :refer :all]
             [clojure.tools.logging :as log]
             [clojure.string :as s]
             )
@@ -87,17 +89,40 @@
 (defmethod ofx->map :default [data]
   nil)
 
-; Makes parsed ofx map into sequence of 
-; acctparser.ParsedMessage's.
-(defn- ofx->ParsedMessages [ofx-map]
-  ofx-map
-  )
+(defn- ofx->ParsedMessages
+  "Parses CreditCardStatementResponse or BankStatementResponse map to sequence
+  of parsed messages."
+  [transaction-parser ofx-map]
+  (let [an (:account-number (:account ofx-map))
+        ab {:ttype :BALANCE
+            :amount (:amount (:available-balance ofx-map))
+            :notes "AVAILABLE"
+            :time (:as-of-date (:available-balance ofx-map))
+            }
+        lb {:ttype :BALANCE
+            :amount (:amount (:ledger-balance ofx-map))
+            :notes "LEDGER"
+            :time (:as-of-date (:ledger-balance ofx-map))
+            }
+        p (transaction-parser)]
+    (concat 
+      [(->ParsedMessage an ab) (->ParsedMessage an lb)]
+      (map (partial
+             parse-ofx-transaction
+             p
+             an
+             ) (:transactions ofx-map)))))
 
-
-(defn parse-file [path]
-  (try 
-    (ofx->ParsedMessages
-      (ofx->map (.unmarshal (AggregateUnmarshaller. ResponseEnvelope)
-                            (FileInputStream. (File. path)))))
-    (catch Exception e
-      (log/error (str "Unable to parse ofx file.\n" e)))))
+(defn parse-file
+  "Read and parse an ofx file for a specific bank and account type."
+  [path bank accttype]
+  (let [parser (get-parser bank accttype)
+        dp (partial ofx->ParsedMessages parser)
+        maps (try 
+               (ofx->map (.unmarshal (AggregateUnmarshaller. ResponseEnvelope)
+                                     (FileInputStream. (File. path))))
+               (catch Exception e
+                 (log/error "Unable to parse ofx file.\n" e)))
+        flat (apply concat maps)
+        ]
+    (flatten (map dp flat))))

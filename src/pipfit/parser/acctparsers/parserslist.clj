@@ -1,15 +1,16 @@
 (ns pipfit.parser.acctparsers.parserslist
   (:require [pipfit.parser.acctparsers.chasechecking
              :refer [->ChaseCheckingParser]]
-    )
-  )
+            [pipfit.parser.account :refer :all]
+            [clojure.string :as s]))
 
-; This file holds a vector of all parsers. When implementing
-; an additional parser, add the constructor to parsers below and
-; require the implementation ns above.
+; Map of all parsers. When adding a new parser, add the constructor
+; here.
 
 (def parsers
-  [
-   ->ChaseCheckingParser
-   ]
-  )
+  {["chase", :CHECKING] ->ChaseCheckingParser})
+
+(defn get-parser
+  "Retrieves the parser for a bank and account type."
+  [bank accttype]
+  (get parsers [(s/lower-case bank), accttype]))
