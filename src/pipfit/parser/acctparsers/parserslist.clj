@@ -2,7 +2,9 @@
   (:require [pipfit.parser.acctparsers.chasechecking
              :refer [->ChaseCheckingParser]]
             [pipfit.parser.account :refer :all]
-            [clojure.string :as s]))
+            [pipfit.parser.accountparser :refer :all]
+            [clojure.string :as s]
+            [clojure.tools.logging :as log]))
 
 ; Map of all parsers. When adding a new parser, add the constructor
 ; here.
@@ -14,3 +16,14 @@
   "Retrieves the parser for a bank and account type."
   [bank accttype]
   (get parsers [(s/lower-case bank), accttype]))
+
+(defn parse-email
+  "Chooses the correct parser and parses an email message."
+  [email]
+  (let [ps (filter #(is-valid-for-email? % email) (vals parsers))
+        [v r] ps]
+    (if r
+      (log/error "Multiple parsers match email.\n" ps)
+      (if v
+        (parse-message (v) (:body email))
+        (log/error "No parsers match email.")))))

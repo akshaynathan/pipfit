@@ -8,4 +8,6 @@
                  [javax.mail/mail "1.4.4"]
                  [org.clojure/tools.logging "0.3.1"]
                  [net.sf.ofx4j/ofx4j "1.6"]
+                 [com.novemberain/monger "2.0.0"]
+                 [cheshire "5.1.1"]
                  ])
