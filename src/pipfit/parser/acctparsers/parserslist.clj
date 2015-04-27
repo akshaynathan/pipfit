@@ -17,8 +17,8 @@
   [bank accttype]
   (get parsers [(s/lower-case bank), accttype]))
 
-(defn parse-email
-  "Chooses the correct parser and parses an email message."
+(defn parse-email-map
+  "Chooses the correct parser and parses a map describing an email message (see server.emailparser)."
   [email]
   (let [ps (filter #(is-valid-for-email? % email) (vals parsers))
         [v r] ps]
