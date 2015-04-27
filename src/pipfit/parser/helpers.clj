@@ -1,6 +1,7 @@
 (ns pipfit.parser.helpers
   (:require [clj-time.format :as f]
             [clj-time.coerce :as c]
+            [clj-time.core :as t]
             [clojure.string :as s]
             [clojure.tools.logging :as log]
             ))
@@ -10,6 +11,12 @@
   [date]
   (f/unparse (f/formatters :date-time-no-ms)
              (c/from-date date)))
+
+(defn epoch->timestamp
+  "Returns the rfc3339 timestamp from an epoch value in GMT."
+  [epoch]
+  (f/unparse (f/formatters :date-time-no-ms)
+             (c/from-long epoch)))
 
 (defn parse-money
   "Parses string representing currency to long. Assumes value is in dollars."

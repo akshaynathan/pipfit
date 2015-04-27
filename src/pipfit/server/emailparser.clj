@@ -6,22 +6,21 @@
            (javax.mail.internet MimeMessage
                                 MimeMultipart
                                 InternetAddress)
-           (java.util Properties)))
+           (java.util Properties)
+           (java.io File FileInputStream)))
 
 ; Wrapper around javax.mail to provide email parsing functionality.
 
-(defn- original-sender
-  "Returns the original sender of a forwarded message or nil if the
+(defn original-sender
+  "Returns the original sender of a forwarded message or empty str if the
   message was not forwarded."
   [body]
   (if (re-find #"(?i)forwarded" body)
-    (let [[_ m] (last (re-seq 
-                        #"(?i)(?:From:\s*)(.*>)(?:\n)"
-                        body))]
-      m)
-    nil))
+    (let [[k m] 
+          (last (re-seq #"(?i)(?:From:\s*)(.*>)(?:\s)" body))]
+      m) ""))
 
-(defn- remove-forward-meta
+(defn remove-forward-meta
   "Removes forward metadata from the text body."
   [body]
   (let [re #"(?i)forwarded|from\s*:|to\s*:|subject\s*:|date\s*:"]
@@ -50,6 +49,7 @@
 
 (defn parse-email [email]
   "Parses an email message into a map of the following structure.
+  email is an InputStream.
   {:to => list of receivers (strings)
    :from => direct sender (string)
    :subject => (string)
@@ -83,3 +83,8 @@
        :body (remove-forward-meta body)
        :sender sender})
   (catch Exception e (log/error e "Unable to parse message."))))
+
+(defn parse-email-file [path]
+  "Parses an email from a file."
+  (parse-email (FileInputStream. (File. path))))
+

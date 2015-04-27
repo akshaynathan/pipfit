@@ -20,7 +20,7 @@
 (defn parse-email-map
   "Chooses the correct parser and parses a map describing an email message (see server.emailparser)."
   [email]
-  (let [ps (filter #(is-valid-for-email? % email) (vals parsers))
+  (let [ps (filter #(is-valid-for-email? (%) email) (vals parsers))
         [v r] ps]
     (if r
       (log/error "Multiple parsers match email.\n" ps)

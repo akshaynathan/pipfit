@@ -4,7 +4,8 @@
             [monger.joda-time]
             [monger.json]
             [clj-time.core :as t]
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [environ.core :refer [env]])
   (:import [com.mongodb DB MongoOptions ServerAddress]
            [org.bson.types ObjectId]))
 
@@ -27,6 +28,16 @@
   [uri username password]
   (let [[conn db] (m/connect-via-uri uri)] 
     (authenticate db username password)))
+
+(defn connect-using-env
+  "Connects to a database using values stored in env
+  variables DBHOST, DBNAME, DBPORT, DBUSER, DBPASS."
+  []
+  (connect (env :dbhost)
+           (Integer. (env :dbport))
+           (env :dbname)
+           (env :dbuser)
+           (env :dbpass)))
 
 (defn create-user
   "Creates a new user."
@@ -69,9 +80,9 @@
 (defn find-user-by-id
   "Finds a user by id."
   [db uid]
-  (mc/find db "Users" {:_id (ObjectId. uid)}))
+  (first (mc/find-maps db "Users" {:_id (ObjectId. uid)})))
 
 (defn find-acct-by-idstr
-  "Finds an account by the account string."
+  "Finds an acount by the account string."
   [db uid acctstr]
-  (mc/find db "Accounts" {:uid (ObjectId. uid) :acctstr acctstr}))
+  (first (mc/find-maps db "Accounts" {:uid (ObjectId. uid) :acctstr acctstr})))

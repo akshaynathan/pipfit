@@ -4,6 +4,7 @@
             [pipfit.parser.accountparser :refer :all]
             [clojure.string :as string]
             [clj-time.format :as f]
+            [clojure.tools.logging :as log]
             )
   )
 
@@ -22,7 +23,9 @@
 ; Chase times in format MM/DD/YYYY H:MM:SS PM/AM TIMEZONE
 (defn- parse-time [str-time]
   (let [formatter (f/formatter "MM/dd/yyyy h:mm:ss aa zzz")
-        parsed-time (f/parse formatter (string/trim str-time))]
+        parsed-time (f/parse formatter (string/trim (string/replace
+                                                      str-time
+                                                      #"\s+" " ")))]
     (f/unparse (f/formatters :date-time-no-ms) parsed-time)))
 
 ; Helper method to parse out the actual transaction.
@@ -51,14 +54,16 @@
     (->AccountParserInfo "CHASE" :CHECKING version supported-transactions))
   ; TODO: Write tests for is-valid-for-email?
   (is-valid-for-email? [this email]
-    (not (nil? (and (re-find #"alertsp\.chase\.com" (:sender email))
+    (not (nil? (and 
+                 (or (re-find #"alertsp\.chase\.com" (:sender email))
+                     (re-find #"(?i)www\.Chase\.com" (:body email)))
                  (or (re-find #"minimum balance" (:body email))
-                   (re-find #"Debit" (:subject email))
-                   (re-find #"external transfer" (:body email))
-                   (re-find #"ATM" (:body email)))))))
+                     (re-find #"Debit" (:subject email))
+                     (re-find #"external transfer" (:body email))
+                     (re-find #"ATM" (:body email)))))))
   (parse-message [this message]
     (let 
-      [lines (string/split message #"[\r\n]+")
+      [lines (string/split message #"\.[\r\n]+")
        ; Get integer account number from first line.
        acct-id (re-find #"\d+" (first lines))
        content (second lines)
