@@ -1,6 +1,8 @@
 /target
 /classes
 /checkouts
+/resources/public/js/compiled
+figwheel_server.log
 pom.xml
 pom.xml.asc
 *.jar
@@ -12,3 +14,5 @@ pom.xml.asc
 *.swp
 *.swo
 *~
+profiles.clj
+dbconfig.sh

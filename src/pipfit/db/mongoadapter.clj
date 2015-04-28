@@ -77,12 +77,22 @@
                                            :notes (:notes transaction)
                                            :date (:time transaction)})))
 
+; TODO: The following two functions are unsafe when a value isnt found.
 (defn find-user-by-id
   "Finds a user by id."
   [db uid]
   (first (mc/find-maps db "Users" {:_id (ObjectId. uid)})))
 
 (defn find-acct-by-idstr
-  "Finds an acount by the account string."
+  "Finds an account by the account string."
   [db uid acctstr]
   (first (mc/find-maps db "Accounts" {:uid (ObjectId. uid) :acctstr acctstr})))
+
+(defn get-user-by-name
+  "Returns map of user for given username (email address) or nil
+   if there is no such user."
+  [db username]
+  (let [res (mc/find-maps db "Users" {:email username})]
+    (if res
+      (first res)
+      nil)))
