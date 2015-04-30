@@ -4,6 +4,7 @@
             [figwheel.client :as fw]
             [om-bootstrap.input :as i]
             [pipfit.web.cljs.login :as l]
+            [pipfit.web.cljs.dashboard :as da]
             [om-bootstrap.button :as b]
             [om-tools.dom :as d :include-macros :true]
             [cljs-http.client :as http]
@@ -20,6 +21,11 @@
 
 (fw/start {})
 
+(defonce app-state
+  (atom
+  {:headers ["Date" "Amount" "Recipient" "Type"]
+   :transactions []}))
+
 (sec/set-config! :prefix "#")
 
 (let [history (History.)
@@ -32,23 +38,14 @@
 
 (defroute "/login" []
   (om/root l/login-form
-           {}
+           app-state
            {:target (. js/document (getElementById "app"))}))
-
-(defn dashboard [data owner]
-  (reify
-    om/IInitState
-    (init-state [_])
-    om/IRenderState
-    (render-state [this state]
-      (dom/div nil
-       (dom/h2 nil "Dashboard")))))
 
 (defroute "/dashboard" []
-  (om/root dashboard
-           {}
+  (om/root da/dashboard-table
+           app-state
            {:target (. js/document (getElementById "app"))}))
 
-(-> js/document
+(comment (-> js/document
     .-location
-    (set! "#/login")) 
+    (set! "#/login"))) 

@@ -4,6 +4,7 @@
     [cemerick.friend :as friend]
     (cemerick.friend  [workflows :as workflows] [credentials :as creds])
     [ring.middleware.json :as json]
+    [ring.middleware.session :as ring-session]
     [ring.middleware.keyword-params :as params]
     [compojure.core :as compojure :refer  (GET POST ANY defroutes)]
     (compojure  [handler :as handler] [route :as route])
@@ -30,6 +31,18 @@
        :uid (str (:_id um))}
       nil)))
 
+(defn get-transactions
+  "Returns a vector of transactions for the current user in the format
+  {time: time amount: amount name: name :type type}"
+  []
+  (let [_ (log/info (friend/current-authentication))
+        uid (:uid (friend/current-authentication))
+        ts (db/get-transactions-for-user db uid)]
+    (map #(hash-map :time (:date %)
+            :amount (/ (:amount %) 100)
+            :name (:to %)
+            :type (:type %)) ts)))
+
 (defn authenticate-user  [{username "username" password "password"}]
     (if-let  [user-record  (get-user-for-username username)]
           (if  (creds/bcrypt-verify password  (:password user-record))
@@ -49,6 +62,16 @@
 
 (def app-routes
   (compojure/routes
+   (GET "/transactions" req
+        
+           (friend/authenticated (let [_ (log/info "We HERE")
+                 _ (log/info (friend/current-authentication))
+                 ts (get-transactions)]
+           {:status 200
+          :headers {"Content-Type" "application/json"}
+          :body ts
+          }))
+         )
     (POST "/login" req
            {:status 200
             :headers {"Content-Type" "application/json"}
@@ -56,13 +79,15 @@
             }    
           )))
 
+(def secure-app
+  (-> app-routes
+      (friend/authenticate {:workflows [(authentication-workflow)]})
+      (ring-session/wrap-session)
+      (params/wrap-keyword-params)
+      (json/wrap-json-body)
+      (json/wrap-json-response  {:pretty true})))
+
 (def app
   (compojure/routes
     (GET "/" req (resp/resource-response "index.html" {:root "public"}))
-    (->  (handler/site
-                 (friend/authenticate app-routes 
-                                      {:workflows 
-                                       [(authentication-workflow)]}))
-            (params/wrap-keyword-params)
-            (json/wrap-json-body)
-            (json/wrap-json-response  {:pretty true}))))
+    secure-app))

@@ -26,15 +26,21 @@
                  [racehub/om-bootstrap "0.5.0"]]
   :plugins [[lein-environ "1.0.0"]
             [lein-figwheel "0.2.7"]
+            [lein-ring "0.9.3"]
             [lein-cljsbuild "1.0.5"]]
   :cljsbuild {:builds [{:id "main"
                         :source-paths ["src"]
                         :compiler {:output-to "resources/public/js/compiled/main.js"
+                                   :asset-path "js/compiled/out"
                                    :output-dir "resources/public/js/compiled/out"
                                    :optimizations :none
-                                   :source-map true}}]}
+                                   :source-map "resources/public/js/out.js.map"
+                                   :preamble ["react/react.min.js"]
+                                   :externs ["react/externs/react.js"]
+                                   }}]}
   :figwheel {:ring-handler pipfit.web.clj.login/app
              :http-server-root "public"
              }
+  :ring {:handler pipfit.web.clj.login/app}
   :uberjar-name "pipfit-standalone.jar"
   :profiles {:production {:env {:production true}}})

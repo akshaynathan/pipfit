@@ -96,3 +96,10 @@
     (if res
       (first res)
       nil)))
+
+(defn get-transactions-for-user
+  "Returns a vector of transactions for a given user."
+  [db uid]
+  (let [_ (log/info uid)
+        res (mc/find-maps db "Transactions" {:uid (ObjectId. uid)})]
+    res))
