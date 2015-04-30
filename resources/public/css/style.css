@@ -12,9 +12,7 @@ body {
   margin: 0 auto;
 }
 .loginform .formlabel,
-.loginform .checkbox {
-  margin-bottom: 10px;
-}
+
 .loginform .form-control {
   position: relative;
   height: auto;
