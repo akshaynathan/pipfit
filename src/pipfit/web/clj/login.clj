@@ -62,22 +62,19 @@
 
 (def app-routes
   (compojure/routes
-   (GET "/transactions" req
-        
-           (friend/authenticated (let [_ (log/info "We HERE")
-                 _ (log/info (friend/current-authentication))
-                 ts (get-transactions)]
-           {:status 200
-          :headers {"Content-Type" "application/json"}
-          :body ts
-          }))
-         )
+   (GET "/transactions" req 
+        (friend/authenticated 
+          (let [ts (get-transactions)]
+            {:status 200 
+             :headers {"Content-Type" "application/json"}
+             :body ts})))
+    (GET "/login" req
+         (friend/authenticated
+           {:status 200}))
     (POST "/login" req
            {:status 200
             :headers {"Content-Type" "application/json"}
-            :body (friend/current-authentication) 
-            }    
-          )))
+            :body (friend/current-authentication)})))
 
 (def secure-app
   (-> app-routes

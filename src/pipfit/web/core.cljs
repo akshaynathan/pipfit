@@ -13,21 +13,20 @@
             [goog.events :as events]
             [cljs.core.async :refer [put! chan <!]]
             [goog.history.EventType :as EventType])
- (:import goog.History) 
-  (:require-macros [cljs.core.async.macros :refer [go]]) 
-  )
+  (:import goog.History) 
+  (:require-macros [cljs.core.async.macros :refer [go]]) )
 
+; TODO: Move this to dev profile.
 (enable-console-print!)
-
 (fw/start {})
 
 (defonce app-state
   (atom
-  {:headers ["Date" "Amount" "Recipient" "Type"]
-   :transactions []}))
+    {:table {:headers ["Date" "Amount" "Recipient" "Type"]
+             :transactions []}}))
 
+; Client side routing set-up.
 (sec/set-config! :prefix "#")
-
 (let [history (History.)
       navigation EventType/NAVIGATE]
   (goog.events/listen history
@@ -46,6 +45,11 @@
            app-state
            {:target (. js/document (getElementById "app"))}))
 
-(comment (-> js/document
-    .-location
-    (set! "#/login"))) 
+; Redirect to the login page only if the user is not already signed
+; in.
+; TODO: Don't check this every time the page is refreshed.
+(let [dest (if (l/signed-in?)
+             "#/dashboard" "#/login")]
+  (-> js/document
+      .-location
+      (set! dest)))
