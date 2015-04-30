@@ -16,8 +16,8 @@
   (let [username (.-value (om/get-node owner "ufield"))
         password (.-value (om/get-node owner "pfield"))]
     (go (let [response 
-              (<! (http/post "/login" {:json-params {:username username
-                                                     :password password}}))]
+              (<! (http/post "/signin" {:json-params {:username username
+                                                      :password password}}))]
           (if (= 200 (:status response))
             (-> js/document
                 .-location
@@ -26,11 +26,12 @@
             (prn "INVALID LOGIN"))))))
 
 (defn signed-in?
-  "Checks if the current user is already signed in."
-  []
+  "Checks if the current user is already signed in
+  and writes result to a channel."
+  [c]
   (go (let [response
-            (<! (http/get "/login"))]
-        (= 200 (:status response)))))
+            (<! (http/get "/signin"))]
+        (>! c (= 200 (:status response))))))
 
 ; TODO: Validate input here.
 (defn handle-change
@@ -48,7 +49,7 @@
       (dom/div #js {:className "container"}
         (dom/form #js {:className "loginform"}
           (dom/h2 #js {:className "formlabel"} "Login")
-          (dom/label #js {:className "sr-only" :for "emailinput"}
+          (dom/label #js {:className "sr-only" :htmlFor "emailinput"}
                  "Email Address")
           (dom/input #js {:type "text"
                           :ref "ufield"
@@ -58,7 +59,7 @@
                           :className "form-control"
                           :onChange #(handle-change % owner :username)
                           :value (:username state)})
-          (dom/label #js {:className "sr-only" :for "passinput"}
+          (dom/label #js {:className "sr-only" :htmlFor "passinput"}
                  "Password")
           (dom/input #js {:type "password"
                           :ref "pfield"

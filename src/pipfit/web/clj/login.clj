@@ -35,8 +35,7 @@
   "Returns a vector of transactions for the current user in the format
   {time: time amount: amount name: name :type type}"
   []
-  (let [_ (log/info (friend/current-authentication))
-        uid (:uid (friend/current-authentication))
+  (let [uid (:uid (friend/current-authentication))
         ts (db/get-transactions-for-user db uid)]
     (map #(hash-map :time (:date %)
             :amount (/ (:amount %) 100)
@@ -52,7 +51,7 @@
   (compojure/routes
     (GET "/logout" req
          (friend/logout* {:status 200}))
-    (POST "/login" {body :body}
+    (POST "/signin" {body :body}
           (if-let [user-record (authenticate-user body)]
             (workflows/make-auth user-record
                                  {:cemerick.friend/workflow
@@ -68,17 +67,19 @@
             {:status 200 
              :headers {"Content-Type" "application/json"}
              :body ts})))
-    (GET "/login" req
-         (friend/authenticated
-           {:status 200}))
-    (POST "/login" req
-           {:status 200
-            :headers {"Content-Type" "application/json"}
-            :body (friend/current-authentication)})))
+   (GET "/signin" req
+        (friend/authenticated
+          {:status 200}))
+   (POST "/signin" req
+          {:status 200
+           :headers {"Content-Type" "application/json"}
+           :body (friend/current-authentication)})))
 
 (def secure-app
   (-> app-routes
-      (friend/authenticate {:workflows [(authentication-workflow)]})
+      (friend/authenticate {:unauthenticated-handler
+                            (fn [req] {:status 403})
+                            :workflows [(authentication-workflow)]})
       (ring-session/wrap-session)
       (params/wrap-keyword-params)
       (json/wrap-json-body)
@@ -87,4 +88,5 @@
 (def app
   (compojure/routes
     (GET "/" req (resp/resource-response "index.html" {:root "public"}))
+    (GET "/dashboard" req (resp/resource-response "index.html" {:root "public"}))
     secure-app))

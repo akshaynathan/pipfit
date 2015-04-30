@@ -11,7 +11,9 @@ body {
   padding: 15px;
   margin: 0 auto;
 }
-.loginform .formlabel,
+.loginform .formlabel {
+  font-size: 30px;
+}
 
 .loginform .form-control {
   position: relative;

@@ -15,7 +15,7 @@
   [cursor]
   (go (let [response (<! (http/get "/transactions" {}) )]
         (if (= 200 (:status response))
-          (om/update! cursor [:transactions] (:body response))
+          (om/update! cursor [:table :transactions] (:body response))
           (prn "INVALID RESPONSE.")))))
 
 (defn table-row [transaction owner]
@@ -32,13 +32,13 @@
     (init-state [_] {})
     om/IRenderState
     (render-state [this state]
-      (let [{:keys [transactions]} cursor]
+      (let [{:keys [transactions]} {:table cursor}]
         (dom/div #js {:className "container"}
           (dom/button #js {:onClick #(get-transactions! cursor)} "Filter")
           (dom/h2 nil "Transactions")
           (dom/table #js {:className "table"}
           (dom/thead nil
             (apply dom/tr nil
-              (map #(dom/th nil %) (:headers cursor))))
-          (apply dom/tbody nil
-            (om/build-all table-row transactions))))))))
+              (map #(dom/th nil %) (:headers (:table cursor)))))
+            (apply dom/tbody nil
+              (om/build-all table-row transactions))))))))

@@ -48,8 +48,10 @@
 ; Redirect to the login page only if the user is not already signed
 ; in.
 ; TODO: Don't check this every time the page is refreshed.
-(let [dest (if (l/signed-in?)
-             "#/dashboard" "#/login")]
-  (-> js/document
-      .-location
-      (set! dest)))
+(go (let [c (chan)
+          _ (l/signed-in? c)
+          sn (<! c)
+          dest (if sn "#/dashboard" "#/login")]
+      (-> js/document
+          .-location
+          (set! dest))))
