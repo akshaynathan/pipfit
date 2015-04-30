@@ -32,10 +32,10 @@
     (init-state [_] {})
     om/IRenderState
     (render-state [this state]
-      (let [{:keys [transactions]} {:table cursor}]
+      (let [{:keys [transactions]} (:table cursor)]
         (dom/div #js {:className "container"}
-          (dom/button #js {:onClick #(get-transactions! cursor)} "Filter")
           (dom/h2 nil "Transactions")
+          (dom/button #js {:onClick #(get-transactions! cursor)} "Filter")
           (dom/table #js {:className "table"}
           (dom/thead nil
             (apply dom/tr nil

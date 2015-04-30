@@ -26,12 +26,15 @@
             (prn "INVALID LOGIN"))))))
 
 (defn signed-in?
-  "Checks if the current user is already signed in
-  and writes result to a channel."
-  [c]
+  "Checks if the current user is signed in, otherwise directs
+  to login page."
+  []
   (go (let [response
-            (<! (http/get "/signin"))]
-        (>! c (= 200 (:status response))))))
+            (<! (http/get "/signin"))
+            k (= 200 (:status response))]
+        (if-not k (-> js/document
+                      .-location
+                      (set! "#/login"))))))
 
 ; TODO: Validate input here.
 (defn handle-change

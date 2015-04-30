@@ -41,17 +41,18 @@
            {:target (. js/document (getElementById "app"))}))
 
 (defroute "/dashboard" []
-  (om/root da/dashboard-table
+  (do (l/signed-in?)
+      (om/root da/dashboard-table
            app-state
-           {:target (. js/document (getElementById "app"))}))
+           {:target (. js/document (getElementById "app"))})))
 
-; Redirect to the login page only if the user is not already signed
-; in.
-; TODO: Don't check this every time the page is refreshed.
-(go (let [c (chan)
-          _ (l/signed-in? c)
-          sn (<! c)
-          dest (if sn "#/dashboard" "#/login")]
+(defroute "/" []
+  (do (l/signed-in?)
       (-> js/document
           .-location
-          (set! dest))))
+          (set! "#/dashboard"))))
+
+(defn- main []
+  (-> js/document
+      .-location
+      (set! "#/")))
