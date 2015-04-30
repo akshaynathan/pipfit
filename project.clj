@@ -20,6 +20,7 @@
                  [cheshire "5.1.1"]
                  [environ "1.0.0"]
                  [ring/ring-json "0.3.1"]
+                 [secretary "1.2.1"]
                  [crypto-password "0.1.3"]
                  [ring "1.3.2"]
                  [racehub/om-bootstrap "0.5.0"]]
@@ -32,6 +33,8 @@
                                    :output-dir "resources/public/js/compiled/out"
                                    :optimizations :none
                                    :source-map true}}]}
-  :figwheel {:ring-handler pipfit.web.clj.login/app}
+  :figwheel {:ring-handler pipfit.web.clj.login/app
+             :http-server-root "public"
+             }
   :uberjar-name "pipfit-standalone.jar"
   :profiles {:production {:env {:production true}}})

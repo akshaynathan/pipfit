@@ -43,25 +43,26 @@
           (if-let [user-record (authenticate-user body)]
             (workflows/make-auth user-record
                                  {:cemerick.friend/workflow
-                                  :authorisation-workflow})
+                                  :authentication-workflow
+                                  ::friend/redirect-on-auth? false})
             {:status 401}))))
 
 (def app-routes
   (compojure/routes
-    (GET "/whoami" req
-         (do
+    (POST "/login" req
            {:status 200
             :headers {"Content-Type" "application/json"}
             :body (friend/current-authentication) 
-            }))))
+            }    
+          )))
 
 (def app
+  (compojure/routes
+    (GET "/" req (resp/resource-response "index.html" {:root "public"}))
     (->  (handler/site
-                   (friend/authenticate app-routes 
-                                        {:workflows 
-                                         [(authentication-workflow)]}))
-              (params/wrap-keyword-params)
-              (json/wrap-json-body)
-              (json/wrap-json-response  {:pretty true})))
-
-
+                 (friend/authenticate app-routes 
+                                      {:workflows 
+                                       [(authentication-workflow)]}))
+            (params/wrap-keyword-params)
+            (json/wrap-json-body)
+            (json/wrap-json-response  {:pretty true}))))

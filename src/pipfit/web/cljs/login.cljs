@@ -17,8 +17,12 @@
         password (.-value (om/get-node owner "pfield"))]
     (go (let [response (<! (http/post "/login" {:json-params {:username username
                                                               :password password}}))]
-          (prn (:status response))
-          (prn (:body response))))))
+          (if (= 200 (:status response))
+            (-> js/document
+                .-location
+                (set! "#/dashboard"))
+            prn "INVALID LOGIN"
+            )))))
 
 (defn handle-change
   "Modify state based on changes in username or password field."
