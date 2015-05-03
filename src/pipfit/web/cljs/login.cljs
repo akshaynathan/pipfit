@@ -36,8 +36,7 @@
   []
   (go (let [response
             (<! (http/get "/signin"))
-            k (= 200 (:status response))
-            _ (prn k)]
+            k (= 200 (:status response))]
         (if-not k (-> js/document
                       .-location
                       (set! "#/login"))))))
@@ -56,7 +55,7 @@
 
 (defn switch-form
   [e owner value]
-  (do (prn (om/get-state owner :signup)) (om/set-state! owner :signup value)))
+  (om/set-state! owner :signup value))
 
 (defn breadcrumb-active?
   [active]
