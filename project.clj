@@ -32,16 +32,15 @@
             [lein-less "1.7.2"]
             [lein-ring "0.9.3"]
             [lein-cljsbuild "1.0.5"]]
-  :cljsbuild {:builds [{:id "main"
-                        :source-paths ["src"]
-                        :compiler {:output-to "resources/public/js/compiled/main.js"
-                                   :asset-path "js/compiled/out"
-                                   :output-dir "resources/public/js/compiled/out"
-                                   :optimizations :none
-                                   :source-map "resources/public/js/out.js.map"
-                                   :preamble ["react/react.min.js"]
-                                   :externs ["react/externs/react.js"]
-                                   }}]}
+
+    :cljsbuild {:builds {:app {:source-paths ["src"]
+                             :compiler {:output-to     "resources/public/js/app.js"
+                                        :output-dir    "resources/public/js/out"
+                                        :source-map    "resources/public/js/out.js.map"
+                                        :preamble      ["react/react.min.js"]
+                                        :optimizations :none
+                                        :pretty-print  true}}}}
+
   :figwheel {:ring-handler pipfit.web.clj.login/app
              :http-server-root "public"
              }
