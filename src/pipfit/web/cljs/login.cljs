@@ -68,7 +68,7 @@
       (dom/div #js {:className "container"}
         (dom/div #js {:className "loginform"}
           (dom/ol #js {:className "breadcrumb"}
-            (dom/li nil
+            (dom/li #js {:className "active"}
               (dom/a #js {:href "javascript:void(0)"
                           :onClick #(switch-form % owner false)
                           } "Login"))

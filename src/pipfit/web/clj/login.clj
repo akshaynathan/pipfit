@@ -91,3 +91,10 @@
     (GET "/" req (resp/resource-response "index.html" {:root "public"}))
     (GET "/dashboard" req (resp/resource-response "index.html" {:root "public"}))
     secure-app))
+
+
+(defn -main [& [port]]
+  (let [port (Integer. (or port (env :port)))]
+   (run-jetty 
+     app
+     {:port port :join? false})))
