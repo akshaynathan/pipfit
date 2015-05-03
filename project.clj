@@ -34,7 +34,6 @@
             [lein-cljsbuild "1.0.5"]]
   :cljsbuild {:builds [{:id "main"
                         :source-paths ["src"]
-                        :jar true
                         :compiler {:output-to "resources/public/js/compiled/main.js"
                                    :asset-path "js/compiled/out"
                                    :output-dir "resources/public/js/compiled/out"
