@@ -34,6 +34,7 @@
             [lein-cljsbuild "1.0.5"]]
   :cljsbuild {:builds [{:id "main"
                         :source-paths ["src"]
+                        :jar true
                         :compiler {:output-to "resources/public/js/compiled/main.js"
                                    :asset-path "js/compiled/out"
                                    :output-dir "resources/public/js/compiled/out"
@@ -48,6 +49,7 @@
   :less {:source-paths ["resources/public/less"]
          :target-path "resources/public/css"
          }
+  :hooks [leiningen.cljsbuild]
   :ring {:handler pipfit.web.clj.login/app}
   :uberjar-name "pipfit-standalone.jar"
   :profiles {:production {:env {:production true}}})
