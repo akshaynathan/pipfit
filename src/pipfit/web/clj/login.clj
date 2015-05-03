@@ -37,8 +37,9 @@
   []
   (let [uid (:uid (friend/current-authentication))
         ts (db/get-transactions-for-user db uid)]
-    (map #(array-map :time (:date %)
-            :amount (/ (:amount %) 100)
+    (map #(array-map 
+            :time (:date %)
+            :amount (/ (:amount %) 100.0)
             :name (:to %)
             :type (:type %)) ts)))
 

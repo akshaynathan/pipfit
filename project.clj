@@ -22,6 +22,7 @@
                  [environ "1.0.0"]
                  [ring/ring-json "0.3.1"]
                  [cljs-pikaday "0.1.1"]
+                 [com.andrewmcveigh/cljs-time "0.3.4"]
                  [secretary "1.2.1"]
                  [crypto-password "0.1.3"]
                  [ring "1.3.2"]

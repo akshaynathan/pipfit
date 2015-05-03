@@ -23,12 +23,14 @@
 
 (defonce app-state
   (atom
-    {:filters {:date {:start {:value (today)}
+    {:date {:value (today)}
+     :filters {:date {:start {:value (today)}
                       :end {:value (today)}}
                :amount {:start 0
-                        :end 0}
-               :search {:str ""}}
+                        :end 1000000}
+               :search ""}
      :table {:headers ["Date" "Amount" "Recipient" "Type"]
+             :filtered? false
              :transactions []
              :filtered_ts []}}))
 
