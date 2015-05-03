@@ -3,6 +3,7 @@
     [pipfit.db.mongoadapter :as db]
     [cemerick.friend :as friend]
     (cemerick.friend  [workflows :as workflows] [credentials :as creds])
+            [ring.adapter.jetty :refer [run-jetty]]
     [ring.middleware.json :as json]
     [ring.middleware.session :as ring-session]
     [ring.middleware.keyword-params :as params]
