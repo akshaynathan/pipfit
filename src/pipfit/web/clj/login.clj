@@ -92,6 +92,7 @@
   (compojure/routes
     (GET "/" req (resp/resource-response "index.html" {:root "public"}))
     (GET "/dashboard" req (resp/resource-response "index.html" {:root "public"}))
+    (route/resources "/")
     secure-app))
 
 
