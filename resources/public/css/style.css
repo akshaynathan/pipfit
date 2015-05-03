@@ -1,4 +1,4 @@
-/* some style */
+/* LOGIN FORM */
 
 body {
   padding-top: 40px;
@@ -15,6 +15,18 @@ body {
   font-size: 30px;
   background: none;
   padding: none;
+}
+
+.loginform .breadcrumb a {
+  color: #909090;
+}
+
+.loginform .breadcrumb .active {
+  color: black;
+}
+
+.loginform .breadcrumb a, a:hover, a:active, a:visited {
+  text-decoration: none;
 }
 
 .loginform .form-control {
@@ -39,6 +51,8 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+/* DASHBOARD */
 
 .datepicker .label {
   color: #030303;

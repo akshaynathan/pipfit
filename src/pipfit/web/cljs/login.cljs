@@ -58,6 +58,12 @@
   [e owner value]
   (do (prn (om/get-state owner :signup)) (om/set-state! owner :signup value)))
 
+(defn breadcrumb-active?
+  [active]
+  (if active
+    "active"
+    ""))
+
 (defn login-form [data owner]
   (reify
     om/IInitState
@@ -68,13 +74,15 @@
       (dom/div #js {:className "container"}
         (dom/div #js {:className "loginform"}
           (dom/ol #js {:className "breadcrumb"}
-            (dom/li #js {:className "active"}
+            (dom/li nil
               (dom/a #js {:href "javascript:void(0)"
                           :onClick #(switch-form % owner false)
+                          :className (breadcrumb-active? (not (:signup state)))
                           } "Login"))
             (dom/li nil
               (dom/a #js {:href "javascript:void(0)"
                           :onClick #(switch-form % owner true)
+                          :className (breadcrumb-active? (:signup state))
                           } "Signup")))
           (dom/label #js {:className "sr-only" :htmlFor "emailinput"}
                  "Email Address")
