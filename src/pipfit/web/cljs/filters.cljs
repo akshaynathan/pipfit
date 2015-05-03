@@ -26,9 +26,10 @@
 (defn matches-pattern?
   "Returns true of transaction name matches search pattern."
   [transaction state]
-  (let [pattern (re-pattern (:search state))]
+  (let [pattern (re-pattern (:search state))
+        n (str (:name transaction))]
     (or (empty? (:search state)) 
-        (boolean (re-find pattern (:name transaction))))))
+        (boolean (re-find pattern n)))))
 
 (defn in-amount-range?
   "Returns true of transaction amount is within amount range."
