@@ -1,0 +1,363 @@
+/*
+ * Datepicker Properties
+ */
+
+@calendar-background-color: #FFFFFF;
+@calendar-border-color: #E0E0E0;
+
+@calendar-base-font-color: #BCBCBC;
+@calendar-instant-font-color: #333;
+@calendar-disabled-font-color: #999999;
+@calendar-highlighted-font-color: #FFFFFF;
+@calendar-selected-font-color: #FFFFFF;
+
+@calendar-days-cell-background-color: #F0F0F0;
+@calendar-weekend-background-color: #F9F9F9;
+@calendar-highlighted-background-color: #AAA;
+@calendar-selected-background-color: #666;
+
+@calendar-cell-width: 30px;
+@calendar-cell-height: @calendar-cell-width;
+@calendar-cell-line-height: @calendar-cell-height;
+
+@datepicker-border-color: #E0E0E0;
+@datepicker-highlighted-border-color: #AAAAAA;
+@datepicker-popup-background-color: #FFFFFF;
+
+/*
+ * Rangepicker Properties
+ */
+
+@rangepicker-calendar-cell-width: 20px;
+@rangepicker-calendar-cell-height: @rangepicker-calendar-cell-width;
+@rangepicker-calendar-cell-line-height: @rangepicker-calendar-cell-width;
+
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.gridline-wrapper {
+    border: 1px solid @calendar-border-color;
+    width: 7 * @calendar-cell-width;
+    background-color: @calendar-background-color;
+    .noselect;
+}
+
+.month-panel {
+
+    width: 7 * @calendar-cell-width;
+    height: @calendar-cell-height;
+    line-height: @calendar-cell-line-height;
+    .noselect;
+
+   div {
+       display: inline-block;
+   }
+
+   .control {
+       width: @calendar-cell-width;
+   }
+
+   .label {
+       width: 5 * @calendar-cell-width;
+       text-align: center;
+   }
+
+}
+
+.cell {
+    float: left;
+    text-align: center;
+    width: @calendar-cell-width;
+    height: @calendar-cell-height;
+    line-height: @calendar-cell-line-height;
+    color: @calendar-base-font-color;
+}
+
+.days {
+    height: @calendar-cell-width;
+    border-bottom: 1px solid @calendar-border-color;
+    border-top: 1px solid @calendar-border-color;
+}
+
+.cell.instant, .days > .cell {
+    color: @calendar-instant-font-color;
+}
+
+.days > .cell {
+    background-color: @calendar-days-cell-background-color;
+}
+
+.week {
+    width: 7 * @calendar-cell-width;
+    height: @calendar-cell-height;
+}
+
+.week > .cell.highlighted {
+    color: @calendar-highlighted-font-color;
+    background-color: @calendar-highlighted-background-color;
+    cursor: pointer;
+}
+
+.week > .cell.disabled {
+    color: @calendar-disabled-font-color;
+    text-decoration: line-through;
+}
+
+.week > .cell.selected {
+    color: @calendar-selected-font-color;
+    background-color: @calendar-selected-background-color;
+}
+
+.weekend {
+    background-color: @calendar-weekend-background-color;
+}
+
+/*
+ * Navigation
+ */
+
+.navigation {
+
+    .control {
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .control.left:after {
+        content: "<";
+    }
+
+    .control.right:after {
+        content: ">";
+    }
+
+    .control.disabled {
+        cursor: initial;
+    }
+
+    .control.disabled.left:after, .control.disabled.right:after {
+        content: "";
+    }
+
+}
+
+/*
+ * DatePicker + RangePicker
+ */
+
+.datepicker, .rangepicker {
+    position: relative;
+    display: inline-block;
+}
+
+.datepicker-input, .rangepicker-input {
+    padding: 6px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+    vertical-align: middle;
+    width: 110px;
+    border: 1px solid @datepicker-border-color;
+    -webkit-appearance: none;
+    -webkit-border-radius:0; 
+    border-radius:0;
+   .noselect;
+}
+
+.datepicker-input.highlighted, .rangepicker-input.highlighted {
+    border: 1px solid @datepicker-highlighted-border-color;
+}
+
+/*
+ * DatePicker Only
+ */
+
+.datepicker-popup {
+
+    position: absolute;
+    margin-top: 25px;
+
+    .datepicker-popup-inner {
+        position: absolute;
+        margin-top: -20px;
+    }
+
+    .datepicker-popup-content {
+        background-color: @datepicker-popup-background-color;
+        -webkit-box-shadow: 0 0 5px 1px gray;
+        box-shadow: 0 0 5px 1px gray;
+        position: relative;
+    }
+
+    .pointer {
+        position: absolute;
+        left: 25px;
+    }
+
+    .pointer:before {
+        bottom: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-bottom-color: @datepicker-popup-background-color;
+        border-width: 10px;
+        left: 50%;
+    }
+
+    .gridline-wrapper {
+        border: none;
+    }
+
+}
+
+/*
+ * RangePicker Only
+ */
+
+.rangepicker-input {
+    width: 190px;
+}
+
+.rangepicker {
+
+    font-size: 12px;
+    line-height: 12px;
+
+    .daterange-input {
+        padding: 4px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 12px;
+        line-height: 14px;
+        vertical-align: middle;
+        width: 80px;
+        border: 1px solid @datepicker-border-color;
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 0;
+        .noselect;
+    }
+
+    .daterange-input.highlighted {
+        border-color: #116AE0;
+    }
+
+    .button {
+        font-size: 12px;
+        line-height: 14px;
+        vertical-align: middle;
+        width: 80px;
+        cursor: pointer;
+        padding: 4px;
+        display: inline-block;
+        text-align: center;
+        border: 1px @datepicker-border-color solid;
+        border-radius: 4px;
+        .noselect;
+    }
+
+    .button:hover {
+        border-color: darken(@datepicker-border-color, 10%);
+    }
+
+    .button.disabled, .button.disabled:hover {
+        cursor: default;
+        color: #c0c0c0;
+        border-color: #f0f0f0;
+    }
+
+    .controls-panel {
+        padding: 5px 3px;
+        text-align: center;
+    }
+
+    .inputs-panel, .buttons-panel {
+        display: inline-block;
+        margin: 3px;
+    }
+
+    .buttons-panel .button:first-child {
+        margin-left: 0;
+        margin-right: 7px;
+    }
+
+    .buttons-panel .button:last-child {
+        margin-left: 7px;
+        margin-right: 0;
+    }
+
+    .rangepicker-popup {
+        position: absolute;
+        width: 466px;
+        border: 1px @datepicker-border-color solid;
+    }
+
+    .rangepicker-popup-content {
+        background-color: @datepicker-popup-background-color;
+    }
+
+    .months div {
+        display: inline-block;
+    }
+
+    .months .month {
+        padding: 4px 5px 3px 5px;
+        width: 130px;
+        text-align: center;
+        color: #455F81;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .months .control {
+        width: 23px;
+    }
+
+    .gridlines {
+        padding: 0 23px 5px 23px;
+    }
+
+    .gridline {
+        display: inline-block;
+        width: 7 * @rangepicker-calendar-cell-width;
+    }
+
+    .cell {
+        width: @rangepicker-calendar-cell-width;
+        height: @rangepicker-calendar-cell-height;
+        line-height: @rangepicker-calendar-cell-line-height;
+    }
+
+    .days {
+        height: @rangepicker-calendar-cell-width;
+        font-weight: bold;
+    }
+
+    .week {
+        width: 7 * @rangepicker-calendar-cell-width;
+        height: @rangepicker-calendar-cell-height;
+    }
+
+    .week > .cell.selected {
+        background-color: #116AE0;
+    }
+
+    .week > .cell.highlighted {
+        background-color: #E49D04;
+    }
+
+    .week > .cell.disabled {
+        text-decoration: none;
+    }
+}

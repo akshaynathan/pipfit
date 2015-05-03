@@ -8,6 +8,7 @@
             [om-bootstrap.button :as b]
             [om-tools.dom :as d :include-macros :true]
             [cljs-http.client :as http]
+            [om-datepicker.dates :refer [today]]
             [om-tools.core :refer-macros [defcomponent]]
             [secretary.core :as sec :refer-macros [defroute]]
             [goog.events :as events]
@@ -22,8 +23,14 @@
 
 (defonce app-state
   (atom
-    {:table {:headers ["Date" "Amount" "Recipient" "Type"]
-             :transactions []}}))
+    {:filters {:date {:start {:value (today)}
+                      :end {:value (today)}}
+               :amount {:start 0
+                        :end 0}
+               :search {:str ""}}
+     :table {:headers ["Date" "Amount" "Recipient" "Type"]
+             :transactions []
+             :filtered_ts []}}))
 
 ; Client side routing set-up.
 (sec/set-config! :prefix "#")
@@ -34,25 +41,18 @@
                      #(-> % .-token sec/dispatch!))
   (doto history (.setEnabled true)))
 
-
 (defroute "/login" []
   (om/root l/login-form
            app-state
            {:target (. js/document (getElementById "app"))}))
 
 (defroute "/dashboard" []
-  (do (l/signed-in?)
-      (om/root da/dashboard-table
-           app-state
-           {:target (. js/document (getElementById "app"))})))
+  (do 
+    (l/signed-in?)
+    (om/root da/dashboard-table
+             app-state
+             {:target (. js/document (getElementById "app"))}))) 
 
-(defroute "/" []
-  (do (l/signed-in?)
-      (-> js/document
-          .-location
-          (set! "#/dashboard"))))
-
-(defn- main []
-  (-> js/document
-      .-location
-      (set! "#/")))
+(-> js/document
+    .-location
+    (set! "#/dashboard"))
